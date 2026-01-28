@@ -40,13 +40,14 @@
 
 ## 安裝
 
-將此 repo 加入 Claude Code 的 skills 目錄：
+```bash
+npx skills add yelban/best-minds.TW
+```
+
+或手動安裝：
 
 ```bash
-# 進入 skills 目錄
 cd ~/.claude/skills/
-
-# Clone 此 repo
 git clone https://github.com/yelban/best-minds.TW.git best-minds
 ```
 
