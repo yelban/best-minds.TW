@@ -25,7 +25,7 @@
 
 ```
 「LLM agent 的記憶系統該怎麼設計？誰最懂這個？」
-→ 組一個視角面板（如 Andrej Karpathy、Richard Sutton、Michael Stonebraker），
+→ 組一個視角圓桌（如 Andrej Karpathy、Richard Sutton、Michael Stonebraker），
   分聲部模擬各自的主張與分歧，最後收斂成建議
 
 「我想辭職創業，請用頂級專家的視角給建議」

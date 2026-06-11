@@ -44,7 +44,7 @@ Karpathy 在 2023 年 Microsoft Build 的《[State of GPT](https://www.youtube.c
 | | 2023 expert prompting | 2025 模擬器思維 |
 |---|---|---|
 | 目的 | 提升單一答案品質 | 探索多元真實視角 |
-| 形式 | 「你是專家」頭銜 | 「哪群人最適合探討？」面板 |
+| 形式 | 「你是專家」頭銜 | 「哪群人最適合探討？」圓桌 |
 | 現狀 | 已無增益，被本人撤回 | 本 skill 實作的方法論 |
 
 ## 2026 的後續發展
@@ -53,11 +53,11 @@ Karpathy 在 2023 年 Microsoft Build 的《[State of GPT](https://www.youtube.c
 
 **本體論修正**：在原 thread 的[一則回覆](https://x.com/karpathy/status/1997759548543947249)中，Karpathy 承認 RLHF/SFT 確實造出了一個工程化的「you」（複合人格），但它是後天拼裝（bolt-on）的，不是像人一樣隨時間建構的心智；在不可驗證的領域（觀點、價值判斷）尤其難以判斷該給它多少可信度。所以「沒有那個你」不是絕對陳述，而是「那個你不是你以為的那種你」。
 
-**從面板到母體**：2026 年 2 月，Karpathy [投資並公開支持](https://x.com/karpathy/status/2022041235188580788) population simulator 新創 Simile：
+**從圓桌到母體**：2026 年 2 月，Karpathy [投資並公開支持](https://x.com/karpathy/status/2022041235188580788) population simulator 新創 Simile：
 
 > "Usually, the LLMs you talk to have a single, specific, crafted personality. But in principle, the native, primordial form of a pretrained LLM is that it is a simulation engine trained over the text of a highly diverse population of people on the internet. Why not lean into that statistical power: Why simulate one 'person' when you could try to simulate a population? ... How do you manage its entropy? How faithful is it?"
 
-模擬器思維的「正史」方向：從單一人物 → 視角面板 → 母體模擬，而 entropy 管理與保真度是公認的未解問題。
+模擬器思維的「正史」方向：從單一人物 → 視角圓桌 → 母體模擬，而 entropy 管理與保真度是公認的未解問題。
 
 ### 理論限定：janus 的澄清
 
@@ -66,7 +66,7 @@ Karpathy 在 2023 年 Microsoft Build 的《[State of GPT](https://www.youtube.c
 ### 社群檢驗：支持與反例
 
 - **persona 不提升準確率**（Ethan Mollick 等，[SSRN 論文](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5879722)）：「你是偉大物理學家」對事實準確率幾乎無顯著提升——佐證本 skill「價值不在答得更好」的護欄
-- **衝突勝過中性面板**（[Brian Roemmele 自述實驗](https://x.com/BrianRoemmele/status/1998068828295877011)，12,400 條推理 trace、六個模型，未經同儕審查）：盲評中「5–7 個立場強烈衝突的人格鏈式辯論」（8.72/10）顯著勝過「中性專家面板」（6.81）與「無人格」（5.94）。乾淨面板易落入低能量、表面平衡的盆地——本 skill「兩階段面板」的交鋒輪即源於此
+- **衝突勝過中性圓桌**（[Brian Roemmele 自述實驗](https://x.com/BrianRoemmele/status/1998068828295877011)，12,400 條推理 trace、六個模型，未經同儕審查）：盲評中「5–7 個立場強烈衝突的人格鏈式辯論」（8.72/10）顯著勝過「中性專家圓桌」（6.81）與「無人格」（5.94）。乾淨圓桌易落入低能量、表面平衡的盆地——本 skill「兩階段圓桌」的交鋒輪即源於此
 - **模擬社會的失效模式**（NeurIPS 2025 相關研究，經 [@koylanai 整理](https://x.com/koylanai/status/1999192104850133146)）：
   1. **假共識** — 多 agent 模擬收斂到訓練資料中位數，少數派觀點被平均掉
   2. **身分扁平化** — 模擬退化成刻板印象，「真實利害關係人豐富的立場知識被換成單體化、去脈絡的模擬」；應追求 reasoning fidelity 而非 speech simulation

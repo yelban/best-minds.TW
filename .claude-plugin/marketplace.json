@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Simulator-mindset skill: don't ask the AI \"what do you think\" — ask \"what group of people would best explore this, and what would they say?\" Traditional Chinese (Taiwan).",
-    "version": "2.0.3"
+    "version": "2.0.4"
   },
   "plugins": [
     {
       "name": "best-minds",
       "source": "./",
       "description": "「模擬器思維」方法論 skill：不問「你怎麼看」，改問「世界上哪群人最適合探討這個？他們會怎麼說？」。基於 Andrej Karpathy 的 simulator 觀點（2025），含反諂媚護欄、引言查證、平行 subagent 面板流程。",
-      "version": "2.0.3",
+      "version": "2.0.4",
       "author": {
         "name": "yelban"
       },
