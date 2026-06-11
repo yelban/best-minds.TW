@@ -1,7 +1,7 @@
 {
   "name": "best-minds",
   "description": "「模擬器思維」方法論 skill：不問「你怎麼看」，改問「世界上哪群人最適合探討這個？他們會怎麼說？」。基於 Andrej Karpathy 的 simulator 觀點（2025），含反諂媚護欄、引言查證、平行 subagent 面板流程。",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "author": {
     "name": "yelban"
   },
