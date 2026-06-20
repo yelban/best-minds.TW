@@ -10,6 +10,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **護欄**：這不是 expert roleplay。Karpathy 本人已澄清不是在建議「你是專家」式的舊提示技巧；本 skill 的價值在視角多元、反諂媚、定位專家分歧。
 
+**語言策略（v2.2.0 起）**：`SKILL.md` 正本以**英文**撰寫，並在開頭明令「以使用者提問的語言回覆」。原因經 A/B 實測：英文指令集對「跟隨使用者語言」比在地化指令更可靠（繁中指令會把英文使用者帶偏成繁中），且護欄遵循度與語言無可靠差異。維護者讀英文正本；繁中說明保留在 `docs/`（人讀的源流記錄）。詳見 `docs/2026-06-20-language-ab-and-english-canonical.md`。
+
 ## 專案結構
 
 ```
@@ -19,7 +21,7 @@ best-minds.TW/
 │   └── plugin.json               # Plugin 清單
 ├── skills/
 │   └── best-minds/
-│       └── SKILL.md              # Skill 定義檔（唯一正本）
+│       └── SKILL.md              # Skill 定義檔（唯一正本，英文撰寫 + 跟隨使用者語言規則）
 ├── SKILL.md                      # → skills/best-minds/SKILL.md 的 symlink（舊式安裝相容）
 ├── evals/
 │   └── evals.json                # 行為驗收契約（實測固化的護欄回歸測試）
@@ -27,7 +29,8 @@ best-minds.TW/
 │   ├── origin.md                 # 方法論源流（2023 演講 → 2025 推文 → 2026 後續 → STORM 交叉驗證）
 │   ├── usage.md                  # 使用指南
 │   ├── 2026-06-12-v2-revision.md # v2.0.0 修訂記錄（反思過程、Grok 查證發現、兩輪修正）
-│   └── 2026-06-20-storm-comparison.md # STORM 對照研究（推文是劣化轉述、三機制借鏡）
+│   ├── 2026-06-20-storm-comparison.md # STORM 對照研究（推文是劣化轉述、三機制借鏡）
+│   └── 2026-06-20-language-ab-and-english-canonical.md # 指令語言 A/B 實測 + 轉英文正本決策
 ├── README.md                     # 英文版（國際推廣，含 mermaid 流程圖）
 ├── README_zh-TW.md               # 繁體中文版
 └── LICENSE                       # MIT License

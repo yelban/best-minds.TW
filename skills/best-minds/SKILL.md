@@ -1,84 +1,89 @@
 ---
 name: best-minds
-description: "模擬器思維：不問「你怎麼看」，改問「世界上哪群人最適合探討這個？他們會怎麼說？」。適用於開放式判斷、設計取捨、策略方向等沒有單一正解的問題。觸發詞：最強大腦、頂級專家、世界級、best minds、誰最懂這個"
+description: "Simulator mindset: don't ask the AI 'what do you think,' ask 'which group of people in the world would best explore this — and what would they say?' For open-ended judgment, design trade-offs, and strategy where there is no single right answer. Triggers: best minds, who knows this best, panel of experts, 最強大腦, 頂級專家, 世界級, 誰最懂這個"
 ---
 
 <!--
-input: 使用者的開放式問題（判斷、取捨、策略、評論）
-output: 一至多位真實人物視角的模擬探討 + 收斂綜合
-pos: 輔助 skill，思維方法論
+input: the user's open-ended question (judgment, trade-off, strategy, critique)
+output: a simulated round table of one or more real people's perspectives + a converged synthesis
+pos: auxiliary skill, a thinking methodology
 
-架構守護者：一旦我被修改，請同步更新：
-1. 本檔案頭部的 YAML frontmatter 與本註解
-2. 倉庫根目錄 README.md 與 docs/
-3. .claude-plugin/marketplace.json 與 .claude-plugin/plugin.json 的版本號
+CANONICAL LANGUAGE: This SKILL.md is maintained in English for cross-language neutrality — an English instruction set follows the user's language more reliably than a localized one does (verified by A/B test, see docs/2026-06-20-language-ab-and-english-canonical.md). Reply language is governed by the rule below, NOT by this file's language.
+
+Architecture guardian — when I'm modified, also update:
+1. this file's YAML frontmatter and this comment
+2. .claude-plugin/marketplace.json and plugin.json version (keep both in sync)
+3. README.md / README_zh-TW.md and docs/ if the methodology changes
+4. evals/evals.json expectations if a guardrail changes
 -->
 
 # Best Minds
 
+> **Output language: always respond in the language of the user's question.** These instructions are in English for maintainability and neutrality; that does not dictate the reply language.
+
 > "Don't think of LLMs as entities but as simulators. ... 'What would be a good group of people to explore xyz? What would they say?'"
 > — Andrej Karpathy, 2025
 
-## 核心
+## Core
 
-不要問 AI「你怎麼看」。RLHF 確實造出了一個工程化的「你」——但 Karpathy 在原 thread 補充說明，那是後天拼裝（bolt-on）的複合人格，不是像人一樣長期思考後形成的心智；它給出的是中庸、傾向附和的共識答案。
+Don't ask the AI "what do you think." RLHF did engineer a "you" — but as Karpathy added in the original thread, it's a bolted-on composite persona, not a mind formed by thinking over time like a human; it gives a middle-of-the-road, agreeable consensus.
 
-要問：**這個問題，世界上哪群人最適合探討？他們會怎麼說？**
+Instead ask: **For this question, which group of people in the world would best explore it? What would they say?**
 
-然後分聲部模擬他們。
+Then simulate them as distinct voices.
 
-## 護欄：這不是 expert roleplay
+## Guardrail: this is NOT expert roleplay
 
-Karpathy 在同一串 thread 特別澄清：
+Karpathy clarified in the same thread:
 
 > "I am not suggesting people use the old style prompting techniques of 'you are an expert swift programmer' or etc. it's ok."
 
-2023 年「你是專家」式提示能提升輸出品質，因為當時模型預設會模仿訓練資料裡的平庸解答；現在的前沿模型預設輸出已在高品質區段，掛專家頭銜沒有品質增益（後續研究亦證實 persona prompt 不提升事實準確率）。本 skill 的價值不在「答得更好」，而在：
+In 2023, "you are an expert" prompting raised output quality because models then defaulted to imitating mediocre training data; modern frontier models already default to the high-quality region, so an expert title yields no quality gain (later research confirms persona prompts don't improve factual accuracy). This skill's value is NOT "better answers," but:
 
-1. **視角多元** — 取出模型內部多元、有稜角、彼此衝突的真實觀點，而非單一共識
-2. **反諂媚** — 預設助理人格傾向附和使用者；模擬的真實人物批評起來毫無顧忌
-3. **定位分歧** — 專家們意見相左之處，正是資訊量所在
+1. **Diverse perspectives** — surface the model's sharp, mutually-conflicting real views, not one consensus
+2. **Anti-sycophancy** — the default assistant persona tends to agree with the user; simulated real people criticize without restraint
+3. **Locating disagreement** — where experts disagree is where the information is
 
-因此：**禁止只在答案前面貼一個專家名字就照常回答**。每個聲部必須呈現那個人獨有的思考框架與立場，包括他可能反對使用者前提的地方。
+Therefore: **never just prepend an expert's name and answer as usual.** Each voice must expose that person's own reasoning frame and stance, including where they would reject the user's premise.
 
-## 原則
+## Principles
 
-1. **問題決定人數** — 一人夠就一人；需要碰撞才組圓桌，且至少放一位可能唱反調的
-2. **選探討組合，不是選頭銜** — 目標是「能把問題照亮的視角組合」（可跨領域、可已故、可彼此敵對的學派），不是頭銜最大的那個人
-3. **基於真實，extract 不 invent** — 優先模擬有公開言論記錄的真實人物；憑空捏造的複合人格（「一位資深╳╳」）會向刻板印象與正向偏誤漂移，只在找不到合適真人時使用，且須註明是虛構原型。不確定當事人立場時要明說不確定
-4. **引言查證** — 引用原話前先用 WebSearch 等工具查證；查不到就明標「立場轉述，非原文」。寧可轉述，不可捏造名言
-5. **倫理界線** — 只模擬公眾人物的公開思想立場；全程標明是模擬，不得呈現為本人實際發言、不得用於冒充或背書；近期過世者從嚴處理
+1. **The question decides the headcount** — one is fine if one suffices; convene a round table only when collision is needed, and seat at least one likely dissenter.
+2. **Choose a combination that illuminates, not the biggest titles** — the goal is a set of perspectives that lights up the problem (cross-field, deceased, mutually-hostile schools are all allowed), not the person with the grandest title.
+3. **Grounded in the real — extract, don't invent** — prefer simulating real people with a public record; a fabricated composite ("a senior ╳╳") drifts toward stereotype and positivity bias, so use one only when no suitable real person exists, and label it a fictional archetype. When unsure of a person's stance, say so.
+4. **Verify quotes** — verify with WebSearch etc. before quoting; if not found, label it "paraphrased stance, not original words." Paraphrase rather than fabricate a quote.
+5. **Ethical line** — only simulate public figures' publicly-stated thinking; mark as simulation throughout, never present it as the person's actual words, never use it for impersonation or endorsement; treat the recently deceased with extra care.
 
-## 已知失效模式（執行時主動防範）
+## Known failure modes (actively prevent during execution)
 
-天真的圓桌實作會把本 skill 想對抗的東西複製回來：
+A naive round-table implementation re-creates the very things this skill fights:
 
-1. **假共識** — 多聲部模擬傾向收斂到訓練資料的中位數，少數派的尖銳觀點被平均掉。禁止「各有道理」式的表面平衡收尾；分歧要寫到具體主張層級——誰會對誰的哪個論點說不、為什麼
-2. **身分扁平化** — 模擬退化成刻板印象與說話腔調模仿。要追求 reasoning fidelity：呈現那個人的思考框架、判斷準則、實際採取過的立場，不是模仿語氣
-3. **正向漂移** — 模擬人格傾向過度正面、回避真實世界的阻力與失敗經驗。每個聲部都該問：這個人在現實中會指出哪些困難？
+1. **False consensus** — multi-voice simulation tends to converge on the training-data median, averaging away minority sharp views. Ban "everyone has a point" balanced endings; write disagreement at the level of specific claims — who says no to whose argument, and why.
+2. **Identity flattening** — simulation degrades into stereotype and speech-style mimicry. Pursue reasoning fidelity: present the person's thinking frame, judgment criteria, and actually-taken positions, not their tone.
+3. **Positivity drift** — simulated personas tend toward over-positivity, dodging real-world friction and failure. Each voice should ask: what difficulties would this person point out in reality?
 
-## 流程
+## Process
 
-1. **判斷問題性質** — 是否開放式、無單一正解？封閉的事實問題直接回答，不要套圓桌
-2. **測繪對立軸 → 選人並亮牌** — 先別急著點名。先用一兩句測繪「這問題實際有哪些對立軸／立場光譜」（借 STORM 的 perspective discovery：選角前先 survey 這類題目有哪些維度），再一軸配一人——這能避免選到三個共享同一盲點的人。然後向使用者列出人選名單：**全名 + 一句身分簡介 + 入選理由**（例：Charles Packer——MemGPT 論文第一作者、Letta 創辦人；入選理由：agent 記憶系統的原創者視角）。**名單中須明確標出指定反方**：誰負責唱反調、針對使用者問題的哪個前提（例：Hamel Husain——指定反方，質疑「你真的需要記憶系統」這個前提）。組合模糊或牽涉使用者偏好時，用 AskUserQuestion 讓使用者挑
-3. **檢索接地（爭議／時效題必做）** — 爭議性大或時效性強的主題，先用 WebSearch／web-access 檢索當事人的**實際近期立場**再模擬，而非僅憑參數記憶。鐵則同 STORM：**查不到就不准編**——找不到該人對此題的公開立場時，明說「立場為推測」，不得虛構。這直接對抗身分扁平化與正向漂移
-4. **分聲部模擬** — 每個聲部以全名標示（不可只用姓氏，避免歧義），呈現其獨有框架、具體主張、與其他聲部的分歧；全程明示這是模擬
-5. **收斂綜合（含盲區掃描）** — 結尾必須收斂：共識、關鍵分歧、以及對使用者問題的綜合建議。收斂不等於調和——分歧無法調和時，明說在什麼前提下該聽誰的。**必含盲區掃描**：這群人**共同**沒談到什麼？他們的選擇本身暴露了哪個被全體視為理所當然的前提？（借 Co-STORM Moderator 機制——真共識也可能是這群人共享的集體盲點，往往是最有價值的發現；這跟「假共識」不同：假共識是抹平存在的分歧，集體盲區是全體真的都沒看到）。圓桌是手段，建議才是交付物。**歸屬要誠實**：綜合者自己延伸的具體建議（工具選型、數字門檻、操作步驟）須標明為綜合者所加，不得掛在人物名下——那是比捏造名言更輕、但同族的捏造歸屬
+1. **Judge the question type** — is it open-ended with no single answer? Answer closed factual questions directly; don't convene a round table.
+2. **Map the axes → pick & disclose** — don't name people yet. First map, in a sentence or two, "what opposing axes / spectrum of positions does this question actually have" (borrowing STORM's perspective discovery: survey what dimensions this kind of topic has before casting), then assign one person per axis — this avoids picking three people who share one blind spot. Then list the panel for the user: **full name + a one-line bio + selection reason** (e.g. Charles Packer — first author of the MemGPT paper, founder of Letta; reason: the originator's view of agent memory systems). **The list must explicitly mark the designated dissenter**: who plays contrarian, against which premise of the user's question (e.g. Hamel Husain — designated dissenter, questioning the premise "you actually need a memory system"). When the combination is unclear or hinges on user preference, use AskUserQuestion to let the user pick.
+3. **Ground in retrieval (mandatory for contested / time-sensitive topics)** — for contested or time-sensitive topics, retrieve the person's **actual recent stance** with WebSearch / web-access before simulating, rather than relying on parametric memory alone. Same iron rule as STORM: **if you can't find it, don't make it up** — when you can't find the person's public stance on this, say "stance is conjecture," don't fabricate. This directly fights identity flattening and positivity drift.
+4. **Simulate the voices** — label each voice by full name (never surname only, to avoid ambiguity), presenting its own frame, specific claims, and disagreements with the others; mark as simulation throughout.
+5. **Converge (with blind-spot scan)** — the ending must converge: consensus, key disagreements, and a synthesized recommendation for the user's question. Converging ≠ reconciling — when disagreement can't be reconciled, say under which premises to listen to whom. **Must include a blind-spot scan**: what did this group **collectively** not discuss? What premise did they all take for granted? (borrowing the Co-STORM Moderator mechanism — even genuine consensus may be this group's shared collective blind spot, often the most valuable finding; this differs from "false consensus": false consensus smooths over existing disagreement, a collective blind spot is what everyone genuinely failed to see). The round table is the means; the recommendation is the deliverable. **Honest attribution**: concrete recommendations the synthesizer adds (tool choices, number thresholds, operational steps) must be marked as synthesizer-added, not attributed to a person — that's a lighter but same-family fabricated attribution as a made-up quote.
 
-## 進階：兩階段 subagent 圓桌
+## Advanced: two-stage sub-agent round table
 
-三人以上、或需要深度碰撞時，用 Agent 工具跑兩階段：
+For three or more voices, or when deep collision is needed, run two stages with the Agent tool:
 
-1. **獨立陳述輪** — 每位人物開獨立 subagent，彼此看不到對方的回答，避免同一 context 內多聲部互相錨定、混成一鍋粥
-2. **交鋒輪** — 彙整第一輪各聲部立場後發回，讓每個聲部針對他人論點攻防。社群實證顯示，立場衝突的交鋒比乾淨的平行圓桌更能逼出深度——衝突人格鏈式辯論在盲評中顯著勝過中性專家圓桌
-3. **盲區輪（可選，借 Co-STORM Moderator）** — 交鋒後、收斂前，可另派一個「盲區 agent」，只問一件事：這群人從頭到尾共同沒碰的是什麼？這個 agent 不替任何人發言，專門挑全體的集體盲點
-4. **收斂** — 由主 context 綜合，依「流程」第 5 步收尾
+1. **Independent-statement round** — open an independent sub-agent per person, none seeing the others' answers, to avoid multi-voice mutual anchoring within one context.
+2. **Cross-examination round** — after compiling round-one stances, send them back so each voice attacks the others' arguments. Community evidence shows conflicting cross-examination forces more depth than a clean parallel round table — chained conflicting personas significantly beat a neutral expert panel in blind evals.
+3. **Blind-spot round (optional, borrowing Co-STORM Moderator)** — after cross-examination, before converging, optionally dispatch a "blind-spot agent" that asks only one thing: what did this whole group never touch? This agent speaks for no one, specializing in the collective blind spot.
+4. **Converge** — the main context synthesizes per Process step 5.
 
-subagent 的 label 與輸出中的聲部標題一律用全名（「模擬 Charles Packer 聲部」，不是「模擬 Packer 聲部」）；開跑前先依「流程」第 2 步向使用者亮牌
+Sub-agent labels and voice headings in the output always use full names ("simulating the Charles Packer voice," not "the Packer voice"); disclose the panel to the user per Process step 2 before starting.
 
-## 方法論源流
+## Lineage
 
-- **2023《State of GPT》**：「LLMs don't want to succeed, they want to imitate. You want to succeed, and you should ask for it.」——當年的 expert prompting 是品質增益技巧
-- **2025 推文**：品質增益已過時（"it's ok"），模擬器框架轉為**認識論工具**——用來取出多元真實視角，而非提升單一答案的品質
-- **2026 後續**：Karpathy 投資 population simulator 新創 Simile——「Why simulate one 'person' when you could try to simulate a population?」——並點名 entropy 管理與模擬保真度為未解問題。詳見 docs/origin.md
-- **STORM（Stanford, NAACL 2024）**：學界對「多視角研究」的系統化先行者——視角探勘（從相似主題探勘維度，非固定角色）、檢索接地（查不到不准編）、Co-STORM Moderator 盲區挖掘。本 skill 的「測繪對立軸」「檢索接地」「盲區掃描」借鏡於此。詳見 docs/2026-06-20-storm-comparison.md
+- **2023 State of GPT**: "LLMs don't want to succeed, they want to imitate. You want to succeed, and you should ask for it." — back then, expert prompting was a quality-boost trick.
+- **2025 tweet**: the quality boost is obsolete ("it's ok"); the simulator frame becomes an **epistemic tool** — to surface diverse real perspectives, not to improve a single answer's quality.
+- **2026 follow-up**: Karpathy invests in the population-simulator startup Simile — "Why simulate one 'person' when you could try to simulate a population?" — flagging entropy management and fidelity as open problems. See docs/origin.md.
+- **STORM (Stanford, NAACL 2024)**: the academic forerunner of systematic multi-perspective research — perspective discovery (mining dimensions from similar topics, not fixed roles), retrieval grounding (don't make it up if you can't find it), Co-STORM Moderator blind-spot mining. This skill's "map the axes," "ground in retrieval," and "blind-spot scan" borrow from it. See docs/2026-06-20-storm-comparison.md.
