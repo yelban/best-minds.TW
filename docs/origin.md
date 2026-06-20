@@ -74,3 +74,9 @@ Karpathy 在 2023 年 Microsoft Build 的《[State of GPT](https://www.youtube.c
 
   本 skill 的「已知失效模式」與「基於真實，extract 不 invent」原則即來自這組發現
 - **倫理警示**：2025–2026 多起關於 AI 模擬真實人物（尤其已故者）的爭議——同意權、哀悼操縱、冒充背書。本 skill 限定為「模擬公眾人物的公開思想立場、全程標明模擬」，與 likeness 複製、griefbot 劃清界線
+
+## 2026-06 交叉驗證：Stanford STORM
+
+對照 Stanford STORM（NAACL 2024）的論文與原始碼後，確認了一條跟 Karpathy 路線平行的學界先驅。STORM 的三個真機制——**視角探勘**（從相似主題探勘維度，非固定角色）、**檢索接地**（查不到不准編）、**Co-STORM Moderator 盲區挖掘**（用未引用資訊挖集體盲點）——其中後兩者補上了 best-minds 原本缺的環節，已採納為 v2.1.0 的「檢索接地」「盲區掃描」。
+
+一個 meta 教訓：當時網路爆紅的是「STORM = 5 個固定角色 + 4 個 prompt」的二手推文，它砍掉了 STORM 真正的 grounding 與 discovery、只留角色空殼；照推文做的 skill 反而退回 Karpathy 警告的固定角色 roleplay。**回到一手來源才看清正源真正值錢的東西——這正是 best-minds 自己的原則：extract from real, not invent。** 完整對照見 [2026-06-20-storm-comparison.md](2026-06-20-storm-comparison.md)。

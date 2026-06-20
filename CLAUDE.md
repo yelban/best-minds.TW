@@ -21,10 +21,13 @@ best-minds.TW/
 │   └── best-minds/
 │       └── SKILL.md              # Skill 定義檔（唯一正本）
 ├── SKILL.md                      # → skills/best-minds/SKILL.md 的 symlink（舊式安裝相容）
+├── evals/
+│   └── evals.json                # 行為驗收契約（實測固化的護欄回歸測試）
 ├── docs/
-│   ├── origin.md                 # 方法論源流（2023 演講 → 2025 推文 → 2026 後續的演化線）
+│   ├── origin.md                 # 方法論源流（2023 演講 → 2025 推文 → 2026 後續 → STORM 交叉驗證）
 │   ├── usage.md                  # 使用指南
-│   └── 2026-06-12-v2-revision.md # v2.0.0 修訂記錄（反思過程、Grok 查證發現、兩輪修正）
+│   ├── 2026-06-12-v2-revision.md # v2.0.0 修訂記錄（反思過程、Grok 查證發現、兩輪修正）
+│   └── 2026-06-20-storm-comparison.md # STORM 對照研究（推文是劣化轉述、三機制借鏡）
 ├── README.md
 └── LICENSE                       # MIT License
 ```
@@ -43,5 +46,6 @@ best-minds.TW/
 2. 檔案內的 HTML 註解（input, output, pos）
 3. `.claude-plugin/marketplace.json` 與 `.claude-plugin/plugin.json` 的 version（兩處需一致）
 4. 內容若涉及方法論變動，同步檢查 `README.md` 與 `docs/`
+5. 改動護欄後，對照 `evals/evals.json` 的 expectations 確認行為契約未被破壞
 
 根目錄 `SKILL.md` 是 symlink，不要直接編輯或以實體檔案覆蓋。

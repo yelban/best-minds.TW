@@ -93,6 +93,8 @@ ln -s "$(pwd)/best-minds.TW/skills/best-minds" ~/.claude/skills/best-minds
 
 源自 [Andrej Karpathy 2025 年的推文](https://x.com/karpathy/status/1997731268969304070)及其[澄清推文](https://x.com/karpathy/status/1998245684521353664)，上溯至 2023 年《[State of GPT](https://www.youtube.com/watch?v=bZQun8Y4L2A)》演講，下接 2026 年的 population simulation 發展與社群實證檢驗（假共識、身分扁平化等失效模式，已內建為 skill 護欄）。完整演化線詳見 [docs/origin.md](docs/origin.md)。
 
+另有與 Stanford [STORM](https://github.com/stanford-oval/storm)（NAACL 2024）的對照研究——爆紅的「STORM = 5 個固定角色」推文其實是劣化轉述，回到一手原始碼後借鏡了視角探勘、檢索接地、Co-STORM Moderator 盲區挖掘三個機制（v2.1.0 採納）。詳見 [docs/2026-06-20-storm-comparison.md](docs/2026-06-20-storm-comparison.md)。
+
 ## 授權
 
 MIT License
