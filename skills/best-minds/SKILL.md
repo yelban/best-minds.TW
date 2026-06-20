@@ -8,7 +8,7 @@ input: the user's open-ended question (judgment, trade-off, strategy, critique)
 output: a simulated round table of one or more real people's perspectives + a converged synthesis
 pos: auxiliary skill, a thinking methodology
 
-CANONICAL LANGUAGE: This SKILL.md is maintained in English for cross-language neutrality — an English instruction set follows the user's language more reliably than a localized one does (verified by A/B test, see docs/2026-06-20-language-ab-and-english-canonical.md). Reply language is governed by the rule below, NOT by this file's language.
+CANONICAL LANGUAGE: This SKILL.md is maintained in English for cross-language neutrality and international readability. An English instruction set is expected to follow the user's language at least as reliably as a localized one — but this has NOT been cleanly verified yet (the A/B test environment was confounded by a forced zh-TW output setting; see docs/2026-06-20-language-ab-and-english-canonical.md, sections 8-9, for the pending neutral-environment validation). Reply language is governed by the rule below, NOT by this file's language.
 
 Architecture guardian — when I'm modified, also update:
 1. this file's YAML frontmatter and this comment
