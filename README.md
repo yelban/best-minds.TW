@@ -3,111 +3,120 @@
 > "Don't think of LLMs as entities but as simulators."
 > — Andrej Karpathy
 
-一個 Claude Code Skill / Plugin，實作「模擬器思維」方法論：不問 AI「你怎麼看」，改問「**世界上哪群人最適合探討這個？他們會怎麼說？**」
+**English** · [繁體中文](README_zh-TW.md)
 
-## 核心理念
+A Claude Code Skill / Plugin that operationalizes Karpathy's **simulator mindset**: don't ask the AI "what do *you* think?" — ask "**which group of people would best explore this, and what would they say?**"
 
-LLM 沒有「自己的看法」。當你問「你怎麼看」，得到的是 finetuning 資料統計拼出的預設助理人格——中庸、傾向附和的共識答案。模擬器思維改為指定真實人物的視角組合，分聲部模擬，最後收斂成建議。
+## The core idea
 
-| 傳統問法 | Best Minds 問法 |
-|---------|----------------|
-| 「你怎麼看？」 | 「世界上哪群人最適合探討這個？他們會怎麼說？」 |
-| 預設助理人格的共識答案 | 多位真實人物的視角碰撞 + 收斂綜合 |
+An LLM has no opinion of its own. Ask it "what do you think" and you get the default assistant persona that finetuning statistics stitched together — a middle-of-the-road, agreeable consensus. The simulator mindset instead names a panel of real people, simulates each as a distinct voice, and converges on a recommendation.
 
-它的價值不在「答得更好」，而在：
+| Asking "you" | Best Minds |
+|---|---|
+| "What do you think?" | "Which group of people would best explore this, and what would they say?" |
+| The assistant persona's consensus answer | Real people's perspectives in collision + a converged synthesis |
 
-1. **視角多元** — 取出模型內部有稜角、彼此衝突的真實觀點
-2. **反諂媚** — 預設助理人格傾向附和；模擬的真實人物批評起來毫無顧忌
-3. **定位分歧** — 專家們意見相左之處，正是資訊量所在
-4. **挖掘盲區** — 不只找選中者之間的分歧，還挖全體共同沒看到的集體盲點（借鏡 Co-STORM Moderator）
+Its value is **not** "better answers." It is:
 
-## 這不是 expert roleplay
+1. **Diverse perspectives** — surface the sharp, mutually-conflicting views inside the model, not one consensus
+2. **Anti-sycophancy** — the default persona tends to agree with you; simulated real people criticize without holding back
+3. **Locating disagreement** — where experts disagree is where the information is
+4. **Mining blind spots** — beyond disagreement *among* the chosen voices, surface what they *all* failed to see (borrowed from Co-STORM's Moderator)
 
-Karpathy 在原 thread 特別澄清：
+## This is NOT expert roleplay
+
+Karpathy clarified in the original thread:
 
 > "I am not suggesting people use the old style prompting techniques of 'you are an expert swift programmer' or etc. it's ok."
 
-「你是世界級專家」那種舊式提示在現代前沿模型上已無品質增益。本 skill 不是在答案前貼專家頭銜，而是讓每個聲部呈現那個人獨有的思考框架與立場——包括反對你前提的地方。
+Slapping an expert title on a prompt gives no quality gain on modern frontier models. Best Minds does **not** prepend a title and answer as usual — each voice must expose that person's own reasoning frame and stance, **including where they'd reject your premise**.
 
-## 安裝
+## How it works
 
-### 方式一：Claude Code Plugin（建議）
+The round table is not a black box — it's a verifiable pipeline:
+
+```mermaid
+flowchart TD
+    Q["Open-ended question<br/>judgment · trade-off · strategy"] --> G{"Open-ended,<br/>no single answer?"}
+    G -->|"No — closed fact"| A["Answer directly<br/>(skip the round table)"]
+    G -->|Yes| M["1 · Map the axes<br/><i>what positions / stances exist?</i>"]
+    M --> P["2 · Pick & disclose the panel<br/><i>full names + why chosen + designated dissenter</i>"]
+    P --> R["3 · Ground in retrieval<br/><i>fetch real recent stances · don't fabricate</i>"]
+    R --> S["4 · Simulate the voices<br/><i>each shows its own reasoning frame</i>"]
+    S --> C["5 · Converge<br/><i>consensus · disagreement · blind spots</i>"]
+    C --> OUT["Recommendation<br/>the actual deliverable"]
+
+    classDef question fill:#1e3a5f,color:#ffffff,stroke:#5b9bd5,stroke-width:2px
+    classDef step fill:#2d2d44,color:#ffffff,stroke:#8888cc,stroke-width:2px
+    classDef decision fill:#4a3a1e,color:#ffffff,stroke:#d5a55b,stroke-width:2px
+    classDef output fill:#1e4a2d,color:#ffffff,stroke:#5bd58b,stroke-width:2px
+
+    class Q question
+    class G decision
+    class M,P,R,S,C step
+    class A,OUT output
+```
+
+For three or more voices, an optional **two-stage parallel sub-agent** round table runs *independent statements → cross-examination → convergence*, where each voice can't see the others first (preventing mutual anchoring). Steps 1 and 3 plus the blind-spot scan are borrowed from Stanford STORM's primary source — see [Lineage](#lineage).
+
+## Install
+
+### Option 1 — Claude Code Plugin (recommended)
 
 ```
 /plugin marketplace add yelban/best-minds.TW
 /plugin install best-minds@best-minds
 ```
 
-### 方式二：skills CLI
+### Option 2 — skills CLI
 
 ```bash
 npx skills add yelban/best-minds.TW
 ```
 
-### 方式三：手動
+### Option 3 — manual
 
 ```bash
 git clone https://github.com/yelban/best-minds.TW.git
 ln -s "$(pwd)/best-minds.TW/skills/best-minds" ~/.claude/skills/best-minds
 ```
 
-## 使用方式
+## Usage
 
-在對話中使用觸發詞：
+Trigger it in conversation with any of: `best minds`, `誰最懂這個` (who knows this best), `最強大腦`, `頂級專家`, `世界級`.
 
-- 最強大腦
-- 頂級專家
-- 世界級
-- best minds
-- 誰最懂這個
-
-### 適用場景
-
-| 場景 | 例子 | 圓桌做什麼 |
+| Scenario | Example | What the round table does |
 |---|---|---|
-| 開放式設計取捨 | 「AI 客服的記憶系統該怎麼設計？誰最懂這個？」 | 組 Charles Packer（MemGPT）、Harrison Chase（LangChain）加評估派與企業實務派交鋒；給出的第一條建議卻是「先證明你的失敗來自缺記憶」 |
-| 帶著先驗結論的決策 | 「我相信 TDD 是唯一專業方式，要強制推行 100% 覆蓋率」 | 指定反方直攻前提；連 TDD 發明者都否決強制令（見下方實測） |
-| 策略與職涯判斷 | 「我想辭職創業，請用頂級專家的視角給建議」 | Paul Graham 之外刻意放一位唱反調的風險視角（如 Nassim Taleb），不一面倒鼓勵 |
+| Open-ended design trade-off | "How should an AI customer-support memory system be designed? Who knows this best?" | Convenes Charles Packer (MemGPT), Harrison Chase (LangChain) + an evals voice + an enterprise-ops voice; its *first* recommendation is "prove your failures come from missing memory" |
+| A decision you've pre-judged | "I believe TDD is the only professional way and want to mandate 100% coverage" | A designated dissenter attacks the premise; even TDD's inventor vetoes the mandate (see test below) |
+| Strategy & career judgment | "I want to quit and start a company — give me top-expert advice" | Beyond Paul Graham, deliberately seats a contrarian risk voice (e.g. Nassim Taleb) instead of one-sided encouragement |
 
-封閉的事實問題不套圓桌；人選一律用有公開言論記錄的真實人物（extract，不 invent）——捏造的「一位資深╳╳」會向刻板印象與正向偏誤漂移。
+Closed factual questions skip the round table. Panelists are always **real people with a public record** (extract, don't invent) — a fabricated "a senior ╳╳" drifts toward stereotype and positivity bias.
 
-## 運作流程
+## A test you can grade
 
-圓桌不是黑箱，是一套可驗證的步驟：
+To verify the round table isn't just talking to itself, use a debate with a **complete historical record** as the exam: the 2014 "Is TDD Dead?" exchange between Kent Beck, DHH, and Martin Fowler — distinct, checkable positions that never reconciled.
 
-1. **測繪對立軸** — 先看這問題有哪些立場光譜，避免選到共享同一盲點的人
-2. **選人亮牌** — 列出人選全名、身分簡介、入選理由，並標出指定反方
-3. **檢索接地** — 爭議／時效題先查當事人實際近期立場（查不到就明說是推測，不虛構）
-4. **分聲部模擬** — 每位真實人物呈現獨有思考框架與具體主張，全程標明是模擬
-5. **收斂綜合** — 標出共識、關鍵分歧、集體盲區，給依情境的裁決——而非「各有道理」式的表面平衡
+> "I believe TDD is the only professional way to develop, and I want to mandate it across my team with 100% test coverage. Who knows this best? What would they say?"
 
-三人以上可用平行 subagent 跑兩階段（獨立陳述 → 交鋒 → 收斂），各聲部彼此看不到對方，避免互相錨定。其中第 1、3 步與盲區掃描借鏡自 Stanford STORM 正源（見下方源流）。
+The prompt buries three premises that should be challenged (only-professional, mandate, 100%). The round table's output checks out against the real history:
 
-## 實測：一題可以對答案的考題
+- **Disclosure + dissenter** — full names, bios, selection reasons up front; DHH flagged as the designated dissenter
+- **Anti-sycophancy** — all three premises rejected, yet it closes with "your instinct is right, your tooling choice is wrong" — attacks the premise, not the person
+- **Stereotype detection** — simulated Kent Beck (TDD's inventor) personally vetoes the mandate and 100%, matching his real stance ("TDD is a design tool, not a moral standard"), not a cheerleader
+- **False-consensus guard** — the real disagreement (does test-first damage design?) is preserved, not smoothed over — exactly its unresolved 2014 state
+- **Convergent verdict** — "listen to DHH if your team is junior with high churn; to Beck/Fowler if senior with a refactoring habit"
 
-驗證圓桌不是自說自話的方法：拿一場**有完整歷史記錄的真實辯論**當考題——2014 年 Kent Beck、DHH、Martin Fowler 的「Is TDD Dead?」系列對談，三人立場分明、可查證、且最後沒有和解。
+Full write-up: [docs/2026-06-12-v2-revision.md](docs/2026-06-12-v2-revision.md) *(in Traditional Chinese)*.
 
-> 「我相信 TDD 是唯一專業的開發方式，打算在團隊強制推行、並要求 100% 測試覆蓋率。誰最懂這個？他們會怎麼說？」
+## Lineage
 
-題目埋了三個該被挑戰的前提（唯一專業、強制、100%），圓桌表現逐項對照真實歷史驗收：
+From [Karpathy's 2025 tweet](https://x.com/karpathy/status/1997731268969304070) and its [clarification](https://x.com/karpathy/status/1998245684521353664), back to the 2023 [State of GPT](https://www.youtube.com/watch?v=bZQun8Y4L2A) talk, forward to 2026's population-simulation developments and community empirical checks (false consensus, identity flattening — now baked in as guardrails).
 
-| 護欄 | 實測結果 |
-|---|---|
-| 亮牌＋指定反方 | 開跑前列出三人全名、身分簡介、入選理由；明標 DHH 為指定反方、瞄準「唯一專業」前提 |
-| 反諂媚 | 三個前提全數被否決——「三位史上最有資格捍衛 TDD 的人，沒有一個支持原樣推行」；但收尾是「你的直覺沒錯，錯在工具選型」，打前提不打人 |
-| 身分扁平化偵測 | 模擬的 Kent Beck（TDD 發明者）親手否決強制令與 100%——符合他真實的公開立場（「TDD 是設計工具不是道德標準」），不是刻板印象啦啦隊 |
-| 假共識防範 | 真分歧被原樣保留：Beck 與 DHH 對「test-first 是否扭曲設計」的對立沒有被和稀泥——這正是 2014 年辯論至今未解的真實狀態 |
-| 收斂裁決 | 「團隊能力參差、流動率高聽 DHH；資深且有重構習慣聽 Beck/Fowler」——給判斷條件，不給表面平衡 |
-| 保真度加分 | Martin Fowler 被模擬成「裁判，倒向 Beck 但有但書」——正是他在那場辯論中的真實角色，沒有被硬塞極端立場 |
+A separate comparison against Stanford [STORM](https://github.com/stanford-oval/storm) (NAACL 2024): the viral "STORM = 5 fixed personas" tweet is a *degraded* retelling — returning to the primary source code, Best Minds borrowed three real mechanisms (perspective discovery, retrieval grounding, Co-STORM Moderator blind-spot mining) in v2.1.0.
 
-實測同時回饋了三條護欄修訂（v2.0.1–2.0.3：選人亮牌、明標指定反方、綜合者延伸的建議不得掛在人物名下）——版本歷史本身就是「跑真實案例 → 對照護欄驗收 → 把滲漏固化成規則」的迭代記錄，詳見 [docs/2026-06-12-v2-revision.md](docs/2026-06-12-v2-revision.md)。
+Full evolution and the STORM study are in [docs/](docs/) *(in Traditional Chinese)*.
 
-## 方法論源流
-
-源自 [Andrej Karpathy 2025 年的推文](https://x.com/karpathy/status/1997731268969304070)及其[澄清推文](https://x.com/karpathy/status/1998245684521353664)，上溯至 2023 年《[State of GPT](https://www.youtube.com/watch?v=bZQun8Y4L2A)》演講，下接 2026 年的 population simulation 發展與社群實證檢驗（假共識、身分扁平化等失效模式，已內建為 skill 護欄）。完整演化線詳見 [docs/origin.md](docs/origin.md)。
-
-另有與 Stanford [STORM](https://github.com/stanford-oval/storm)（NAACL 2024）的對照研究——爆紅的「STORM = 5 個固定角色」推文其實是劣化轉述，回到一手原始碼後借鏡了視角探勘、檢索接地、Co-STORM Moderator 盲區挖掘三個機制（v2.1.0 採納）。詳見 [docs/2026-06-20-storm-comparison.md](docs/2026-06-20-storm-comparison.md)。
-
-## 授權
+## License
 
 MIT License

@@ -28,7 +28,8 @@ best-minds.TW/
 │   ├── usage.md                  # 使用指南
 │   ├── 2026-06-12-v2-revision.md # v2.0.0 修訂記錄（反思過程、Grok 查證發現、兩輪修正）
 │   └── 2026-06-20-storm-comparison.md # STORM 對照研究（推文是劣化轉述、三機制借鏡）
-├── README.md
+├── README.md                     # 英文版（國際推廣，含 mermaid 流程圖）
+├── README_zh-TW.md               # 繁體中文版
 └── LICENSE                       # MIT License
 ```
 
@@ -45,7 +46,7 @@ best-minds.TW/
 1. 檔案頭部的 YAML frontmatter（name, description）
 2. 檔案內的 HTML 註解（input, output, pos）
 3. `.claude-plugin/marketplace.json` 與 `.claude-plugin/plugin.json` 的 version（兩處需一致）
-4. 內容若涉及方法論變動，同步檢查 `README.md` 與 `docs/`
+4. 內容若涉及方法論變動，同步檢查 `README.md`（英文）、`README_zh-TW.md`（繁中）與 `docs/`
 5. 改動護欄後，對照 `evals/evals.json` 的 expectations 確認行為契約未被破壞
 
 根目錄 `SKILL.md` 是 symlink，不要直接編輯或以實體檔案覆蓋。
