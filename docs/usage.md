@@ -1,49 +1,59 @@
-# Best Minds Skill 使用指南
+# Best Minds Skill — Usage Guide
 
-## 能力說明
+> 繁體中文版：[usage_zh-TW.md](usage_zh-TW.md)
 
-這是一個**思維方法論** skill，改變 AI 回答開放式問題的方式：
+## What it does
 
-| 傳統問法 | Best Minds 問法 |
-|---------|----------------|
-| 「你怎麼看？」 | 「世界上哪群人最適合探討這個？他們會怎麼說？」 |
-| 預設助理人格的共識答案 | 多位真實人物的視角碰撞 + 收斂綜合 |
+This is a **thinking-methodology** skill that changes how the AI answers open-ended questions:
 
-適用於開放式判斷、設計取捨、策略方向等沒有單一正解的問題；封閉的事實問題不適用（直接回答即可）。
+| The usual way | Best Minds |
+|---|---|
+| "What do you think?" | "Which group of people in the world would best explore this, and what would they say?" |
+| The assistant persona's consensus answer | Real people's perspectives in collision + a converged synthesis |
 
-## 觸發詞
+Use it for open-ended judgment, design trade-offs, and strategy — questions with no single right answer. Closed factual questions are out of scope (just answer them directly).
 
-在對話中使用以下詞彙即可觸發：
+## Triggers
 
-- 最強大腦
-- 頂級專家
-- 世界級
-- best minds
-- 誰最懂這個
+Any of these in conversation will trigger it:
 
-## 使用範例
+- best minds / who knows this best / panel of experts
+- 最強大腦 / 頂級專家 / 世界級 / 誰最懂這個
+
+## Examples
 
 ```
-「LLM agent 的記憶系統該怎麼設計？誰最懂這個？」
-→ 組一個視角圓桌（如 Andrej Karpathy、Richard Sutton、Michael Stonebraker），
-  分聲部模擬各自的主張與分歧，最後收斂成建議
+"How should an LLM agent's memory system be designed? Who knows this best?"
+→ Convenes a perspective round table (e.g. Andrej Karpathy, Richard Sutton,
+  Michael Stonebraker), simulates each as a distinct voice with its own claims
+  and disagreements, then converges on a recommendation
 
-「我想辭職創業，請用頂級專家的視角給建議」
-→ 可能模擬 Paul Graham，並刻意放一位會唱反調的風險視角（如 Nassim Taleb），
-  而不是一面倒的鼓勵
+"I want to quit and start a company — give me top-expert advice"
+→ Might simulate Paul Graham plus a deliberately contrarian risk voice
+  (e.g. Nassim Taleb), instead of one-sided encouragement
 ```
 
-人選一律用有公開言論記錄的真實人物；找不到合適真人時才用虛構原型，且會註明。
+Panelists are always real people with a public record; a fictional archetype is used only when no suitable real person exists, and is labeled as such.
 
-## 輸出形式
+## How it works
 
-1. **選人亮牌** — 開始模擬前先列出人選名單：全名 + 一句身分簡介 + 入選理由（如「Charles Packer——MemGPT 論文第一作者、Letta 創辦人」），並明確標出指定反方——誰負責唱反調、針對你問題的哪個前提；組合模糊時會先用選項詢問你
-2. **分聲部模擬** — 每個聲部標明姓名，呈現其獨有思考框架與具體主張（不是模仿說話腔調），全程明示是模擬
-3. **收斂綜合** — 結尾標出共識、關鍵分歧、以及對你問題的綜合建議；不會用「各有道理」式的表面平衡收尾，分歧無法調和時會明說在什麼前提下該聽誰的。綜合者自己延伸的具體建議（工具選型、數字門檻）會標明為綜合者所加，不掛在人物名下
+The round table is not a black box — it's a verifiable pipeline:
 
-## 核心價值
+1. **Map the axes** — first see what spectrum of positions the question spans, to avoid picking people who share one blind spot
+2. **Pick & disclose** — list the panel: full name + a one-line bio + selection reason (e.g. "Charles Packer — first author of the MemGPT paper, founder of Letta"), and explicitly mark the **designated dissenter** — who plays contrarian, against which premise; if the combination is unclear, you'll be asked to pick first
+3. **Ground in retrieval** — for contested / time-sensitive topics, the person's actual recent stance is retrieved before simulating (if not found, it's flagged as conjecture, not fabricated)
+4. **Simulate the voices** — each voice is labeled by full name, presenting its own reasoning frame and specific claims (not tone mimicry); marked as simulation throughout
+5. **Converge (with blind-spot scan)** — the ending states consensus, key disagreements, and a recommendation for your question; no "everyone has a point" balanced ending — when disagreement can't be reconciled, it says under which premises to listen to whom. It **always includes a blind-spot scan**: what the group collectively didn't discuss, what premise they all took for granted. Concrete recommendations the synthesizer adds (tool choices, number thresholds) are marked as synthesizer-added, not attributed to a panelist
 
-利用 LLM 作為「模擬器」的特性——訓練資料包含大量真實人物的著作、演講、訪談，所以能合理模擬這些人的思維框架。價值在於視角多元、反諂媚（模擬人物批評起來毫無顧忌）、定位專家分歧，而不是給答案掛專家頭銜。
+For three or more voices, an optional two-stage parallel sub-agent round table runs *independent statements → cross-examination → convergence*, where each voice can't see the others first (preventing mutual anchoring).
+
+## Reply language
+
+The canonical `SKILL.md` is written in English (for international reach and cross-language neutrality), but its opening rule mandates "respond in the language of the user's question." So a Chinese question gets a Chinese answer, an English question an English one — verified in a neutral environment across Chinese / English / Japanese. See [2026-06-20-language-ab-and-english-canonical.md](2026-06-20-language-ab-and-english-canonical.md) (in Traditional Chinese).
+
+## Core value
+
+It leverages the LLM's nature as a "simulator" — its training data contains many real people's books, talks, and interviews, so it can reasonably simulate their thinking frames. The value is in diverse perspectives, anti-sycophancy (simulated people criticize without restraint), locating expert disagreement, and mining collective blind spots — not in slapping an expert title on the answer.
 
 > "Don't think of LLMs as entities but as simulators."
 > — Andrej Karpathy

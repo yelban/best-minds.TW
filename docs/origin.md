@@ -1,10 +1,12 @@
-# 發想來源
+# Origins
 
-## Andrej Karpathy 的 LLM 模擬器觀點（2025）
+> 繁體中文版：[origin_zh-TW.md](origin_zh-TW.md)
 
-這個 Skill 的核心理念源自 Andrej Karpathy 2025 年 12 月在 X 上的一串推文。
+## Andrej Karpathy's LLM-as-simulator view (2025)
 
-### 原始推文
+This skill's core idea comes from a December 2025 thread by Andrej Karpathy on X.
+
+### The original tweet
 
 > "Don't think of LLMs as entities but as simulators. For example, when exploring a topic, don't ask:
 >
@@ -16,67 +18,67 @@
 >
 > — [@karpathy, 2025-12](https://x.com/karpathy/status/1997731268969304070)
 
-核心論點：
+Core claims:
 
-1. **LLM 是模擬器，不是實體** — 它沒有像人類那樣長期思考一個主題、逐漸形成自己觀點的過程
-2. **沒有真正的「你」** — 問「你怎麼看」，是強迫它採用 finetuning 資料統計所暗示的人格向量，得到的是某種「平均觀點」
-3. **正確用法是指定視角組合** — 問「哪群人最適合探討這個？他們會怎麼說？」，讓模擬器發揮多視角能力
+1. **An LLM is a simulator, not an entity** — it has no process of thinking about a topic over time and gradually forming its own view, the way a human does.
+2. **There is no real "you"** — asking "what do you think" forces it to adopt the persona vector implied by finetuning statistics, yielding a kind of "average opinion."
+3. **The right use is to specify a combination of perspectives** — ask "which group of people would best explore this? What would they say?" and let the simulator exercise its multi-perspective capacity.
 
-### 澄清推文（同串 thread）
+### The clarification (same thread)
 
 > "A good chunk of people misunderstood this tweet btw, which is my bad. I am not suggesting people use the old style prompting techniques of 'you are an expert swift programmer' or etc. it's ok."
 >
 > — [@karpathy](https://x.com/karpathy/status/1998245684521353664)
 
-這則澄清是本 skill 的關鍵護欄：**模擬器思維不是 expert roleplay**。重點是視角的多元探索，不是給答案掛專家頭銜。
+This clarification is the skill's key guardrail: **the simulator mindset is NOT expert roleplay.** The point is diverse perspective exploration, not slapping an expert title on the answer.
 
-## 上溯：2023《State of GPT》的演化線
+## Tracing back: the 2023 State of GPT evolution line
 
-Karpathy 在 2023 年 Microsoft Build 的《[State of GPT](https://www.youtube.com/watch?v=bZQun8Y4L2A)》演講中說過：
+In the 2023 Microsoft Build talk [State of GPT](https://www.youtube.com/watch?v=bZQun8Y4L2A), Karpathy said:
 
 > "LLMs don't want to succeed, they want to imitate. You want to succeed, and you should ask for it."
 > "Say something like, you are a leading expert on this topic. Pretend you have IQ 120..."
 
-當年的邏輯：訓練資料裡好壞解答混雜，模型預設模仿全部，所以用「你是專家」把它調到分布的高品質區段——這是**品質增益技巧**。
+The logic then: training data mixes good and bad solutions, the model defaults to imitating all of it, so "you are an expert" nudges it into the high-quality region of the distribution — a **quality-boost trick**.
 
-到了 2025 年，前沿模型預設輸出已在高品質區段，這個技巧失效（"it's ok"）。但「模擬器」的本體論依然成立，框架轉為**認識論工具**：
+By 2025, frontier models already default to the high-quality region, so the trick is obsolete ("it's ok"). But the "simulator" ontology still holds; the frame shifts to an **epistemic tool**:
 
-| | 2023 expert prompting | 2025 模擬器思維 |
+| | 2023 expert prompting | 2025 simulator mindset |
 |---|---|---|
-| 目的 | 提升單一答案品質 | 探索多元真實視角 |
-| 形式 | 「你是專家」頭銜 | 「哪群人最適合探討？」圓桌 |
-| 現狀 | 已無增益，被本人撤回 | 本 skill 實作的方法論 |
+| Goal | Improve a single answer's quality | Explore diverse real perspectives |
+| Form | "You are an expert" title | "Which group would best explore this?" round table |
+| Status | No longer a gain, retracted by the author | The methodology this skill implements |
 
-## 2026 的後續發展
+## 2026 follow-ups
 
-### Karpathy 本人的延伸
+### Karpathy's own extensions
 
-**本體論修正**：在原 thread 的[一則回覆](https://x.com/karpathy/status/1997759548543947249)中，Karpathy 承認 RLHF/SFT 確實造出了一個工程化的「you」（複合人格），但它是後天拼裝（bolt-on）的，不是像人一樣隨時間建構的心智；在不可驗證的領域（觀點、價值判斷）尤其難以判斷該給它多少可信度。所以「沒有那個你」不是絕對陳述，而是「那個你不是你以為的那種你」。
+**Ontological correction**: in a [reply within the original thread](https://x.com/karpathy/status/1997759548543947249), Karpathy concedes that RLHF/SFT does engineer a "you" (a composite persona) — but it's a bolted-on artifact, not a mind built over time like a human's; in non-verifiable domains (opinions, value judgments) it's especially hard to know how much credence to give it. So "there is no you" isn't an absolute claim, but "that 'you' isn't the kind of 'you' you think it is."
 
-**從圓桌到母體**：2026 年 2 月，Karpathy [投資並公開支持](https://x.com/karpathy/status/2022041235188580788) population simulator 新創 Simile：
+**From round table to population**: in February 2026, Karpathy [invested in and publicly backed](https://x.com/karpathy/status/2022041235188580788) the population-simulator startup Simile:
 
 > "Usually, the LLMs you talk to have a single, specific, crafted personality. But in principle, the native, primordial form of a pretrained LLM is that it is a simulation engine trained over the text of a highly diverse population of people on the internet. Why not lean into that statistical power: Why simulate one 'person' when you could try to simulate a population? ... How do you manage its entropy? How faithful is it?"
 
-模擬器思維的「正史」方向：從單一人物 → 視角圓桌 → 母體模擬，而 entropy 管理與保真度是公認的未解問題。
+The "canonical" direction of the simulator mindset: from a single person → a perspective round table → population simulation, with entropy management and fidelity acknowledged as open problems.
 
-### 理論限定：janus 的澄清
+### Theoretical bound: janus's clarification
 
-《Simulators》原作者 janus（@repligate）在 [2026 年 4 月澄清](https://x.com/repligate/status/2039857049312612571)：Simulators 理論針對的是 **base model**；RL 後訓練會打破天真的模擬器性質，產出的 character「常無法化約為訓練資料的線性總和」。對本 skill 的意義：你操作的是「對齊後的模擬器」，預設助理人格是真實存在的引力井，這正是需要明確指定視角組合來脫離它的原因。
+The author of *Simulators*, janus (@repligate), [clarified in April 2026](https://x.com/repligate/status/2039857049312612571) that the Simulators theory targets the **base model**; RL post-training breaks the naive simulator property, and the resulting character is "often irreducible to anything like a linear sum of its training data." For this skill: you're operating an *aligned* simulator, where the default assistant persona is a real gravity well — which is exactly why you must explicitly specify a combination of perspectives to escape it.
 
-### 社群檢驗：支持與反例
+### Community checks: support and counterexamples
 
-- **persona 不提升準確率**（Ethan Mollick 等，[SSRN 論文](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5879722)）：「你是偉大物理學家」對事實準確率幾乎無顯著提升——佐證本 skill「價值不在答得更好」的護欄
-- **衝突勝過中性圓桌**（[Brian Roemmele 自述實驗](https://x.com/BrianRoemmele/status/1998068828295877011)，12,400 條推理 trace、六個模型，未經同儕審查）：盲評中「5–7 個立場強烈衝突的人格鏈式辯論」（8.72/10）顯著勝過「中性專家圓桌」（6.81）與「無人格」（5.94）。乾淨圓桌易落入低能量、表面平衡的盆地——本 skill「兩階段圓桌」的交鋒輪即源於此
-- **模擬社會的失效模式**（NeurIPS 2025 相關研究，經 [@koylanai 整理](https://x.com/koylanai/status/1999192104850133146)）：
-  1. **假共識** — 多 agent 模擬收斂到訓練資料中位數，少數派觀點被平均掉
-  2. **身分扁平化** — 模擬退化成刻板印象，「真實利害關係人豐富的立場知識被換成單體化、去脈絡的模擬」；應追求 reasoning fidelity 而非 speech simulation
-  3. **合成人格系統性偏移** — 憑空捏造的人格有正向漂移與政治傾向漂移；「extract from real，不要 invent」
+- **Personas don't improve accuracy** (Ethan Mollick et al., [SSRN paper](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=5879722)): "you are a great physicist" gives almost no significant gain in factual accuracy — supporting this skill's guardrail that the value is "not better answers."
+- **Conflict beats a neutral round table** ([Brian Roemmele's self-reported experiment](https://x.com/BrianRoemmele/status/1998068828295877011), 12,400 reasoning traces, six models, not peer-reviewed): in blind evals, "5–7 strongly conflicting personas in chained debate" (8.72/10) significantly beat a "neutral expert round table" (6.81) and "no persona" (5.94). A clean round table tends to fall into a low-energy, superficially-balanced basin — the source of this skill's two-stage cross-examination round.
+- **Failure modes of simulating society** (NeurIPS 2025 work, via [@koylanai](https://x.com/koylanai/status/1999192104850133146)):
+  1. **False consensus** — multi-agent simulation converges on the training-data median, averaging away minority views.
+  2. **Identity flattening** — simulation degrades into stereotype; "the rich, positional knowledge of real stakeholders is replaced with monolithic, decontextualized simulation"; pursue reasoning fidelity over speech simulation.
+  3. **Synthetic-persona systematic drift** — fabricated personas show positivity and political-leaning drift; "extract from real, don't invent."
 
-  本 skill 的「已知失效模式」與「基於真實，extract 不 invent」原則即來自這組發現
-- **倫理警示**：2025–2026 多起關於 AI 模擬真實人物（尤其已故者）的爭議——同意權、哀悼操縱、冒充背書。本 skill 限定為「模擬公眾人物的公開思想立場、全程標明模擬」，與 likeness 複製、griefbot 劃清界線
+  This skill's "known failure modes" and the "grounded in the real, extract not invent" principle come from this set of findings.
+- **Ethical warnings**: 2025–2026 saw multiple controversies over AI-simulating real people (especially the deceased) — consent, grief manipulation, impersonated endorsement. This skill is limited to "simulating public figures' publicly-stated thinking, marked as simulation throughout," drawing a clear line away from likeness cloning and griefbots.
 
-## 2026-06 交叉驗證：Stanford STORM
+## 2026-06 cross-validation: Stanford STORM
 
-對照 Stanford STORM（NAACL 2024）的論文與原始碼後，確認了一條跟 Karpathy 路線平行的學界先驅。STORM 的三個真機制——**視角探勘**（從相似主題探勘維度，非固定角色）、**檢索接地**（查不到不准編）、**Co-STORM Moderator 盲區挖掘**（用未引用資訊挖集體盲點）——其中後兩者補上了 best-minds 原本缺的環節，已採納為 v2.1.0 的「檢索接地」「盲區掃描」。
+Comparing against Stanford STORM (NAACL 2024) — its paper and source code — confirmed an academic forerunner running parallel to Karpathy's line. STORM's three real mechanisms — **perspective discovery** (mining dimensions from similar topics, not fixed roles), **retrieval grounding** (don't make it up if you can't find it), and **Co-STORM Moderator blind-spot mining** (using uncited information to surface collective blind spots) — the latter two filled gaps this skill originally lacked, adopted as v2.1.0's "ground in retrieval" and "blind-spot scan."
 
-一個 meta 教訓：當時網路爆紅的是「STORM = 5 個固定角色 + 4 個 prompt」的二手推文，它砍掉了 STORM 真正的 grounding 與 discovery、只留角色空殼；照推文做的 skill 反而退回 Karpathy 警告的固定角色 roleplay。**回到一手來源才看清正源真正值錢的東西——這正是 best-minds 自己的原則：extract from real, not invent。** 完整對照見 [2026-06-20-storm-comparison.md](2026-06-20-storm-comparison.md)。
+A meta-lesson: what went viral at the time was the second-hand tweet "STORM = 5 fixed personas + 4 prompts," which stripped out STORM's real grounding and discovery, leaving only the persona shell; a skill built from that tweet would regress to the fixed-role roleplay Karpathy warned against. **Returning to the primary source is what reveals the genuinely valuable parts — which is this skill's own principle: extract from real, not invent.** Full comparison in [2026-06-20-storm-comparison.md](2026-06-20-storm-comparison.md) (in Traditional Chinese).

@@ -26,11 +26,11 @@ best-minds.TW/
 ├── evals/
 │   └── evals.json                # 行為驗收契約（實測固化的護欄回歸測試）
 ├── docs/
-│   ├── origin.md                 # 方法論源流（2023 演講 → 2025 推文 → 2026 後續 → STORM 交叉驗證）
-│   ├── usage.md                  # 使用指南
-│   ├── 2026-06-12-v2-revision.md # v2.0.0 修訂記錄（反思過程、Grok 查證發現、兩輪修正）
-│   ├── 2026-06-20-storm-comparison.md # STORM 對照研究（推文是劣化轉述、三機制借鏡）
-│   └── 2026-06-20-language-ab-and-english-canonical.md # 指令語言 A/B 實測 + 轉英文正本決策
+│   ├── origin.md / origin_zh-TW.md  # 方法論源流（英／繁；2023→2025→2026→STORM）
+│   ├── usage.md / usage_zh-TW.md    # 使用指南（英／繁）
+│   ├── 2026-06-12-v2-revision.md # v2.0.0 修訂記錄（繁中過程記錄）
+│   ├── 2026-06-20-storm-comparison.md # STORM 對照研究（繁中）
+│   └── 2026-06-20-language-ab-and-english-canonical.md # 指令語言 A/B 實測 + 轉英文正本決策（繁中）
 ├── README.md                     # 英文版（國際推廣，含 mermaid 流程圖）
 ├── README_zh-TW.md               # 繁體中文版
 └── LICENSE                       # MIT License
@@ -49,7 +49,7 @@ best-minds.TW/
 1. 檔案頭部的 YAML frontmatter（name, description）
 2. 檔案內的 HTML 註解（input, output, pos）
 3. `.claude-plugin/marketplace.json` 與 `.claude-plugin/plugin.json` 的 version（兩處需一致）
-4. 內容若涉及方法論變動，同步檢查 `README.md`（英文）、`README_zh-TW.md`（繁中）與 `docs/`
+4. 內容若涉及方法論變動，同步檢查 `README.md`（英）／`README_zh-TW.md`（繁）與 `docs/`（`origin.md`／`usage.md` 為英文版，`*_zh-TW.md` 為繁中版，兩者並行維護；其餘 `docs/` 過程記錄維持繁中）
 5. 改動護欄後，對照 `evals/evals.json` 的 expectations 確認行為契約未被破壞
 
 根目錄 `SKILL.md` 是 symlink，不要直接編輯或以實體檔案覆蓋。

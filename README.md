@@ -115,7 +115,7 @@ From [Karpathy's 2025 tweet](https://x.com/karpathy/status/1997731268969304070) 
 
 A separate comparison against Stanford [STORM](https://github.com/stanford-oval/storm) (NAACL 2024): the viral "STORM = 5 fixed personas" tweet is a *degraded* retelling — returning to the primary source code, Best Minds borrowed three real mechanisms (perspective discovery, retrieval grounding, Co-STORM Moderator blind-spot mining) in v2.1.0.
 
-Full evolution and the STORM study are in [docs/](docs/) *(in Traditional Chinese)*.
+Full evolution is in [docs/origin.md](docs/origin.md); the STORM study is in [docs/2026-06-20-storm-comparison.md](docs/2026-06-20-storm-comparison.md) *(in Traditional Chinese)*.
 
 ## License
 
