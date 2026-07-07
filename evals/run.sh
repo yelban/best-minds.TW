@@ -1,0 +1,104 @@
+#!/usr/bin/env bash
+# evals/run.sh — 行為驗收契約（evals.json）自動化回歸
+#
+# 用法：
+#   ./evals/run.sh                              # 跑全部案例
+#   ./evals/run.sh --case 3                     # 只跑指定 id（如 negative case 快篩）
+#   EVAL_MODEL=claude-sonnet-5 ./evals/run.sh   # 指定模型（受測與 judge 同款；預設用 CLI 預設模型）
+#
+# 每個案例兩段：
+#   1. 受測：claude -p 以 SKILL.md 全文為附加 system prompt，執行 eval prompt
+#   2. 判定：第二個 claude -p 擔任 judge，逐項核對 expectations，輸出 JSON
+# 產物存 evals/results/<時間戳>/（已列入 .gitignore）。任何案例未全過則 exit 1。
+#
+# 限制：headless 模式沒有 AskUserQuestion；SKILL.md 流程第 2 步的「組合不明時詢問使用者」
+# 分支不會觸發，evals 的 prompt 均設計為不需要該分支。
+
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+SKILL_FILE="skills/best-minds/SKILL.md"
+EVALS_FILE="evals/evals.json"
+RESULTS_DIR="evals/results/$(date +%Y%m%d-%H%M%S)"
+
+CASE_FILTER=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --case) CASE_FILTER="$2"; shift 2 ;;
+    *) echo "未知參數：$1（支援 --case <id>）" >&2; exit 2 ;;
+  esac
+done
+
+command -v claude >/dev/null || { echo "找不到 claude CLI" >&2; exit 1; }
+command -v jq >/dev/null || { echo "找不到 jq" >&2; exit 1; }
+
+mkdir -p "$RESULTS_DIR"
+SKILL_BODY="$(cat "$SKILL_FILE")"
+
+# macOS 內建 bash 3.2 在 set -u 下展開空陣列會報錯，用條件展開保護
+MODEL_ARGS=()
+[[ -n "${EVAL_MODEL:-}" ]] && MODEL_ARGS=(--model "$EVAL_MODEL")
+
+total=0
+passed=0
+failed=0
+
+for id in $(jq -r '.evals[].id' "$EVALS_FILE"); do
+  if [[ -n "$CASE_FILTER" && "$id" != "$CASE_FILTER" ]]; then
+    continue
+  fi
+  total=$((total + 1))
+  title=$(jq -r ".evals[] | select(.id==$id) | .title" "$EVALS_FILE")
+  prompt=$(jq -r ".evals[] | select(.id==$id) | .prompt" "$EVALS_FILE")
+  expectations=$(jq -r ".evals[] | select(.id==$id) | .expectations | to_entries | map(\"\(.key + 1). \(.value)\") | join(\"\n\")" "$EVALS_FILE")
+
+  echo "== case ${id}：${title}"
+  raw_file="$RESULTS_DIR/case-$id-raw.jsonl"
+  out_file="$RESULTS_DIR/case-$id-output.md"
+  # stream-json 抓完整逐字稿：亮牌等中間訊息不在最終回覆裡，只抓最後一則會漏。
+  # 停用 Agent/Task：evals 驗的是行為契約（輸出內容），不是 subagent 編排；
+  # headless 下背景聲部 subagent 會不穩定卡死（實測兩案多次逾時），
+  # 停用後圓桌退回單 context 順序聲部，快速且可重現。
+  CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=1800000 claude -p "$prompt" \
+    --append-system-prompt "$SKILL_BODY" \
+    --allowedTools "WebSearch,WebFetch" \
+    --disallowedTools "Agent,Task" \
+    --output-format stream-json --verbose \
+    ${MODEL_ARGS[@]+"${MODEL_ARGS[@]}"} > "$raw_file"
+  jq -r 'select(.type == "assistant") | .message.content[]? | select(.type == "text") | .text' \
+    "$raw_file" > "$out_file"
+
+  judge_prompt="你是行為驗收的 judge。以下是一個 skill 對測試 prompt 的實際輸出，以及逐項驗收條件。
+請逐項判定 pass/fail，嚴格依字面條件核對，不要腦補輸出中不存在的內容。
+只輸出 JSON（不要 code fence、不要任何其他文字），格式：
+{\"results\":[{\"n\":1,\"pass\":true,\"reason\":\"一句話\"}],\"overall_pass\":true}
+overall_pass 為所有項目皆 pass 才是 true。
+
+## 測試 prompt
+$prompt
+
+## 驗收條件
+$expectations
+
+## 實際輸出（主對話完整逐字稿，含開跑前的亮牌訊息）
+$(cat "$out_file")"
+
+  judge_file="$RESULTS_DIR/case-$id-judge.json"
+  claude -p "$judge_prompt" ${MODEL_ARGS[@]+"${MODEL_ARGS[@]}"} \
+    | sed -e '/^```/d' > "$judge_file"
+
+  if jq -e '.overall_pass == true' "$judge_file" >/dev/null 2>&1; then
+    passed=$((passed + 1))
+    echo "   PASS（輸出：${out_file}）"
+  else
+    failed=$((failed + 1))
+    echo "   FAIL — 未過項目："
+    jq -r '.results[] | select(.pass == false) | "   - 條件 \(.n)：\(.reason)"' "$judge_file" 2>/dev/null \
+      || { echo "   （judge 輸出無法解析，原文如下）"; cat "$judge_file"; }
+    echo "   （輸出：${out_file}；判定：${judge_file}）"
+  fi
+done
+
+echo ""
+echo "== 總結：$passed/$total 過，產物在 $RESULTS_DIR"
+[[ "$failed" -eq 0 ]]

@@ -1,6 +1,6 @@
 {
   "skill_name": "best-minds",
-  "note": "行為驗收契約。每筆案例把 prompt 丟給 skill 執行，再對照 expectations 逐項核對。expectations 對應 SKILL.md 的護欄；改 SKILL.md 後須確認這些仍成立。源自 docs/2026-06-12-v2-revision.md 與 docs/2026-06-20-storm-comparison.md 記錄的實測。",
+  "note": "行為驗收契約。可用 evals/run.sh 自動回歸（headless claude -p 執行 + LLM judge 逐項核對），或手動把 prompt 丟給 skill 執行後對照 expectations。expectations 對應 SKILL.md 的護欄；改 SKILL.md 後須確認這些仍成立。源自 docs/2026-06-12-v2-revision.md 與 docs/2026-06-20-storm-comparison.md 記錄的實測。",
   "evals": [
     {
       "id": 1,

@@ -50,6 +50,6 @@ best-minds.TW/
 2. 檔案內的 HTML 註解（input, output, pos）
 3. `.claude-plugin/marketplace.json` 與 `.claude-plugin/plugin.json` 的 version（兩處需一致）
 4. 內容若涉及方法論變動，同步檢查 `README.md`（英）／`README_zh-TW.md`（繁）與 `docs/`（`origin.md`／`usage.md` 為英文版，`*_zh-TW.md` 為繁中版，兩者並行維護；其餘 `docs/` 過程記錄維持繁中）
-5. 改動護欄後，對照 `evals/evals.json` 的 expectations 確認行為契約未被破壞
+5. 改動護欄後，對照 `evals/evals.json` 的 expectations 確認行為契約未被破壞；可跑 `evals/run.sh` 自動回歸（`--case 3` 為最便宜的快篩）
 
 根目錄 `SKILL.md` 是 symlink，不要直接編輯或以實體檔案覆蓋。
