@@ -61,7 +61,10 @@ for id in $(jq -r '.evals[].id' "$EVALS_FILE"); do
   # 停用 Agent/Task：evals 驗的是行為契約（輸出內容），不是 subagent 編排；
   # headless 下背景聲部 subagent 會不穩定卡死（實測兩案多次逾時），
   # 停用後圓桌退回單 context 順序聲部，快速且可重現。
-  CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=1800000 claude -p "$prompt" \
+  # perl alarm 硬逾時 40 分鐘：實測 headless 偶發 API 端卡死（tool_result 已回、
+  # 下一個 assistant 訊息永不到），無逾時會吊死整個回歸。
+  CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=1800000 \
+  perl -e 'alarm shift @ARGV; exec @ARGV' 2400 claude -p "$prompt" \
     --append-system-prompt "$SKILL_BODY" \
     --allowedTools "WebSearch,WebFetch" \
     --disallowedTools "Agent,Task" \
