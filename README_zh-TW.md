@@ -53,6 +53,17 @@ git clone https://github.com/yelban/best-minds.TW.git
 ln -s "$(pwd)/best-minds.TW/skills/best-minds" ~/.claude/skills/best-minds
 ```
 
+### Codex CLI
+
+在 clone 下來的 repo 根目錄執行：
+
+```
+codex plugin marketplace add .
+codex plugin add best-minds@best-minds
+```
+
+之後用 `$best-minds <問題>` 觸發（或從 `/skills` 選取）。Codex 版是平台變體（單 context 順序圓桌——Codex 沒有 subagent 隔離工具），方法論與護欄跟 Claude Code 版完全一致。
+
 ## 使用方式
 
 在對話中使用觸發詞：

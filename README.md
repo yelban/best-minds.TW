@@ -81,6 +81,17 @@ git clone https://github.com/yelban/best-minds.TW.git
 ln -s "$(pwd)/best-minds.TW/skills/best-minds" ~/.claude/skills/best-minds
 ```
 
+### Codex CLI
+
+From a cloned repo root:
+
+```
+codex plugin marketplace add .
+codex plugin add best-minds@best-minds
+```
+
+Then use `$best-minds <question>` (or pick it from `/skills`). The Codex edition ships as a platform variant (single-context sequential round table — Codex has no sub-agent isolation); the methodology and guardrails are identical to the Claude Code edition.
+
 ## Usage
 
 Trigger it in conversation with any of: `best minds`, `誰最懂這個` (who knows this best), `最強大腦`, `頂級專家`, `世界級`.

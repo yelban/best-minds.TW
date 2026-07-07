@@ -1,0 +1,20 @@
+{
+  "name": "best-minds",
+  "interface": {
+    "displayName": "best-minds"
+  },
+  "plugins": [
+    {
+      "name": "best-minds",
+      "source": {
+        "source": "local",
+        "path": "./plugins/best-minds"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

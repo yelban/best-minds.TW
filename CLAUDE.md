@@ -22,6 +22,16 @@ best-minds.TW/
 ├── skills/
 │   └── best-minds/
 │       └── SKILL.md              # Skill 定義檔（唯一正本，英文撰寫 + 跟隨使用者語言規則）
+├── .agents/
+│   └── plugins/
+│       └── marketplace.json      # Codex marketplace 清單（指向 ./plugins/best-minds）
+├── plugins/
+│   └── best-minds/
+│       ├── .codex-plugin/
+│       │   └── plugin.json       # Codex CLI plugin 清單（雙平台發佈）
+│       └── skills/
+│           └── best-minds/
+│               └── SKILL.md      # Codex 平台變體（僅平台機制不同，方法論跟隨正本）
 ├── SKILL.md                      # → skills/best-minds/SKILL.md 的 symlink（舊式安裝相容）
 ├── evals/
 │   └── evals.json                # 行為驗收契約（實測固化的護欄回歸測試）
@@ -48,7 +58,8 @@ best-minds.TW/
 修改 `skills/best-minds/SKILL.md`（唯一正本）時，須同步更新：
 1. 檔案頭部的 YAML frontmatter（name, description）
 2. 檔案內的 HTML 註解（input, output, pos）
-3. `.claude-plugin/marketplace.json` 與 `.claude-plugin/plugin.json` 的 version（兩處需一致）
+3. `.claude-plugin/marketplace.json`、`.claude-plugin/plugin.json` 與 `plugins/best-minds/.codex-plugin/plugin.json` 的 version（三處需一致）
+3b. 方法論變動需移植到 Codex 平台變體 `plugins/best-minds/skills/best-minds/SKILL.md`（該檔僅平台機制與正本不同：無 subagent 工具、一般提問取代 AskUserQuestion、泛稱 web search）
 4. 內容若涉及方法論變動，同步檢查 `README.md`（英）／`README_zh-TW.md`（繁）與 `docs/`（`origin.md`／`usage.md` 為英文版，`*_zh-TW.md` 為繁中版，兩者並行維護；其餘 `docs/` 過程記錄維持繁中）
 5. 改動護欄後，對照 `evals/evals.json` 的 expectations 確認行為契約未被破壞；可跑 `evals/run.sh` 自動回歸（`--case 3` 為最便宜的快篩）
 
