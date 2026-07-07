@@ -116,7 +116,16 @@ flowchart TD
 4. **分聲部模擬** — 每位真實人物呈現獨有思考框架與具體主張，全程標明是模擬
 5. **收斂綜合** — 標出共識、關鍵分歧、集體盲區，給依情境的裁決——而非「各有道理」式的表面平衡
 
-三人以上可用平行 subagent 跑兩階段（獨立陳述 → 交鋒 → 收斂），各聲部彼此看不到對方，避免互相錨定。其中第 1、3 步與盲區掃描借鏡自 Stanford STORM 正源（見下方源流）。
+三人以上可用平行 subagent 跑兩階段（獨立陳述 → 交鋒 → 收斂），各聲部彼此看不到對方，避免互相錨定。在 Claude Code 上優先走 **Workflow tool**——parallel `agent()` 讓隔離成為結構保證而非指令自律、schema 強制每個立場輸出可比對的格式、流程不可被靜默跳步；備援用 **Agent tool**，交鋒輪以 SendMessage 延續**同一批**聲部 agents，讓每個人物保留第一輪建立的推理脈絡。其中第 1、3 步與盲區掃描借鏡自 Stanford STORM 正源（見下方源流）。
+
+## v2.3.0 更新重點
+
+以 Claude Code v2.1.201 ＋ Claude Fable 5 調校：
+
+- **Frontmatter 升級** — 觸發詞移至 `when_to_use`，新增 `argument-hint` 與 `allowed-tools: WebSearch, WebFetch, Agent`。預先核准檢索工具，把「引言查證」護欄從指令自律升級為機制保障（不會因權限提示被靜默跳過）。舊版 Claude Code 會忽略不認識的欄位，不影響使用。
+- **編排升級** — 多聲部圓桌優先走 Workflow tool，交鋒輪以 SendMessage 延續同一批聲部（見上）。
+- **護欄補強（有實測數據）** — 自動化行為回歸（`evals/run.sh`：headless 執行＋LLM judge 對照 `evals/evals.json` 的驗收契約）抓到兩個真實護欄缺口：非互動執行時，亮牌與對立軸測繪會被跳過。修正後實測：case 1 由 8/9 → 9/9、case 2 由 6/7 → 7/7，負向案例（封閉事實題不觸發圓桌）維持通過。
+- **Codex 雙平台** — 本 skill 也能裝進 Codex CLI，見上方〔Codex CLI〕安裝章節。
 
 ## 實測：一題可以對答案的考題
 

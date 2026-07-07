@@ -57,7 +57,16 @@ flowchart TD
     class A,OUT output
 ```
 
-For three or more voices, an optional **two-stage parallel sub-agent** round table runs *independent statements → cross-examination → convergence*, where each voice can't see the others first (preventing mutual anchoring). Steps 1 and 3 plus the blind-spot scan are borrowed from Stanford STORM's primary source — see [Lineage](#lineage).
+For three or more voices, an optional **two-stage parallel sub-agent** round table runs *independent statements → cross-examination → convergence*, where each voice can't see the others first (preventing mutual anchoring). On Claude Code this prefers the **Workflow tool** — parallel `agent()` calls make the isolation structural rather than honor-system, a schema forces each stance into a comparable format, and no stage can be silently skipped — falling back to the **Agent tool**, where the cross-examination round continues the *same* voice agents via SendMessage so each persona keeps the reasoning context it built in round one. Steps 1 and 3 plus the blind-spot scan are borrowed from Stanford STORM's primary source — see [Lineage](#lineage).
+
+## What's new in v2.3.0
+
+Tuned on Claude Code v2.1.201 with Claude Fable 5:
+
+- **Frontmatter upgrades** — triggers moved to `when_to_use`; added `argument-hint` and `allowed-tools: WebSearch, WebFetch, Agent`. Pre-approving retrieval turns the quote-verification guardrail from an honor-system instruction into a mechanism (no permission prompt to silently skip past). Older Claude Code versions ignore unknown fields, so nothing breaks.
+- **Orchestration upgrade** — the multi-voice round table prefers the Workflow tool and continues the same voice agents via SendMessage in the cross-examination round (see above).
+- **Hardened guardrails, measured** — an automated behavioral regression (`evals/run.sh`: headless run + LLM judge against the contract in `evals/evals.json`) caught two real guardrail gaps: in non-interactive runs the panel disclosure and the axis map could be skipped. With the fixes, case 1 went 8/9 → 9/9 and case 2 went 6/7 → 7/7 on the judged expectations, while the negative case (closed factual questions must not convene a round table) stays green.
+- **Codex dual-platform** — the skill also installs into Codex CLI; see [Codex CLI](#codex-cli) below.
 
 ## Install
 

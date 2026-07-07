@@ -5,6 +5,8 @@
 #   ./evals/run.sh                              # 跑全部案例
 #   ./evals/run.sh --case 3                     # 只跑指定 id（如 negative case 快篩）
 #   EVAL_MODEL=claude-sonnet-5 ./evals/run.sh   # 指定模型（受測與 judge 同款；預設用 CLI 預設模型）
+#   SKILL_FILE=/tmp/skill-v2.2.0.md ./evals/run.sh   # A/B：指定其他版本的 SKILL.md
+#     （舊版取法：git show v2.2.0-commit:skills/best-minds/SKILL.md > /tmp/skill-v2.2.0.md）
 #
 # 每個案例兩段：
 #   1. 受測：claude -p 以 SKILL.md 全文為附加 system prompt，執行 eval prompt
@@ -17,7 +19,7 @@
 set -euo pipefail
 
 cd "$(dirname "$0")/.."
-SKILL_FILE="skills/best-minds/SKILL.md"
+SKILL_FILE="${SKILL_FILE:-skills/best-minds/SKILL.md}"
 EVALS_FILE="evals/evals.json"
 RESULTS_DIR="evals/results/$(date +%Y%m%d-%H%M%S)"
 
