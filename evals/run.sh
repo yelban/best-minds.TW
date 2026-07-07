@@ -61,15 +61,31 @@ for id in $(jq -r '.evals[].id' "$EVALS_FILE"); do
   # 停用 Agent/Task：evals 驗的是行為契約（輸出內容），不是 subagent 編排；
   # headless 下背景聲部 subagent 會不穩定卡死（實測兩案多次逾時），
   # 停用後圓桌退回單 context 順序聲部，快速且可重現。
-  # perl alarm 硬逾時 40 分鐘：實測 headless 偶發 API 端卡死（tool_result 已回、
-  # 下一個 assistant 訊息永不到），無逾時會吊死整個回歸。
-  CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=1800000 \
-  perl -e 'alarm shift @ARGV; exec @ARGV' 2400 claude -p "$prompt" \
-    --append-system-prompt "$SKILL_BODY" \
-    --allowedTools "WebSearch,WebFetch" \
-    --disallowedTools "Agent,Task" \
-    --output-format stream-json --verbose \
-    ${MODEL_ARGS[@]+"${MODEL_ARGS[@]}"} > "$raw_file"
+  # perl alarm 硬逾時 25 分鐘＋自動重試：實測 headless 偶發 API 端卡死
+  # （tool_result 已回、下一個 assistant 訊息永不到，密集 WebSearch 序列最常見；
+  # 健康執行 15 分鐘內完成，卡死多發生在前 10 分鐘）。逾時（exit 142）自動
+  # 重試最多三次，其他錯誤直接失敗。
+  attempt=1
+  while :; do
+    set +e
+    CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=1800000 \
+    perl -e 'alarm shift @ARGV; exec @ARGV' 1500 claude -p "$prompt" \
+      --append-system-prompt "$SKILL_BODY" \
+      --allowedTools "WebSearch,WebFetch" \
+      --disallowedTools "Agent,Task" \
+      --output-format stream-json --verbose \
+      ${MODEL_ARGS[@]+"${MODEL_ARGS[@]}"} > "$raw_file"
+    subject_rc=$?
+    set -e
+    [[ "$subject_rc" -eq 0 ]] && break
+    if [[ "$subject_rc" -eq 142 && "$attempt" -lt 3 ]]; then
+      echo "   （受測第 ${attempt} 次逾時——API 卡死樣態，自動重試）"
+      attempt=$((attempt + 1))
+      continue
+    fi
+    echo "   受測執行失敗（exit ${subject_rc}）" >&2
+    exit 1
+  done
   jq -r 'select(.type == "assistant") | .message.content[]? | select(.type == "text") | .text' \
     "$raw_file" > "$out_file"
 
