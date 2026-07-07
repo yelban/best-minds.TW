@@ -45,7 +45,7 @@ The round table is not a black box — it's a verifiable pipeline:
 4. **Simulate the voices** — each voice is labeled by full name, presenting its own reasoning frame and specific claims (not tone mimicry); marked as simulation throughout
 5. **Converge (with blind-spot scan)** — the ending states consensus, key disagreements, and a recommendation for your question; no "everyone has a point" balanced ending — when disagreement can't be reconciled, it says under which premises to listen to whom. It **always includes a blind-spot scan**: what the group collectively didn't discuss, what premise they all took for granted. Concrete recommendations the synthesizer adds (tool choices, number thresholds) are marked as synthesizer-added, not attributed to a panelist
 
-For three or more voices, an optional two-stage parallel sub-agent round table runs *independent statements → cross-examination → convergence*, where each voice can't see the others first (preventing mutual anchoring).
+For three or more voices, an optional two-stage parallel sub-agent round table runs *independent statements → citation cross-check → cross-examination → convergence*, where each voice can't see the others first (preventing mutual anchoring) and every claim marked *verified* is re-checked against its cited source by a separate verifier before other voices read it.
 
 ## Reply language
 

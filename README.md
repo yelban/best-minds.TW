@@ -57,7 +57,15 @@ flowchart TD
     class A,OUT output
 ```
 
-For three or more voices, an optional **two-stage parallel sub-agent** round table runs *independent statements → cross-examination → convergence*, where each voice can't see the others first (preventing mutual anchoring). On Claude Code this prefers the **Workflow tool** — parallel `agent()` calls make the isolation structural rather than honor-system, a schema forces each stance into a comparable format, and no stage can be silently skipped — falling back to the **Agent tool**, where the cross-examination round continues the *same* voice agents via SendMessage so each persona keeps the reasoning context it built in round one. Steps 1 and 3 plus the blind-spot scan are borrowed from Stanford STORM's primary source — see [Lineage](#lineage).
+For three or more voices, an optional **two-stage parallel sub-agent** round table runs *independent statements → citation cross-check → cross-examination → convergence*, where each voice can't see the others first (preventing mutual anchoring). On Claude Code this prefers the **Workflow tool** — parallel `agent()` calls make the isolation structural rather than honor-system, a schema forces each stance into a comparable format, and no stage can be silently skipped — falling back to the **Agent tool**, where the cross-examination round continues the *same* voice agents via SendMessage so each persona keeps the reasoning context it built in round one. Steps 1 and 3 plus the blind-spot scan are borrowed from Stanford STORM's primary source — see [Lineage](#lineage).
+
+## What's new in v2.4.0
+
+Hardening distilled from the first full live round table — the skill was turned on its own revision, and the transcript is in [docs/2026-07-07-roundtable-eval-methodology.md](docs/2026-07-07-roundtable-eval-methodology.md) (Traditional Chinese):
+
+- **Adversarial citation cross-check** — in the sub-agent flow, a verifier per voice re-fetches every claim marked *verified* and downgrades what the cited source doesn't support; a voice's self-labeling alone no longer counts.
+- **Out-of-discipline seat** — when every panelist shares one disciplinary frame, the panel must seat a stakeholder voice from outside it. Observed live: a panel of three eval methodologists never questioned whether the thing being measured was worth measuring — the composition itself guaranteed the blind spot.
+- **Audit archive** — the full debate (claims with evidence labels and sources, cross-examination, blind-spot scan, synthesis) is persisted to a dated markdown file when file writing is available, so citations can be re-checked later.
 
 ## What's new in v2.3.0
 
