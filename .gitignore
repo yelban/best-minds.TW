@@ -31,3 +31,6 @@ youtube-transcript/
 .serena/
 .claude/
 .mcp.json
+_.claude/
+_.mcp.json
+evals/results/

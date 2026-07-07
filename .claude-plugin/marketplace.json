@@ -6,14 +6,14 @@
   },
   "metadata": {
     "description": "Simulator-mindset skill: don't ask the AI \"what do you think\" — ask \"what group of people would best explore this, and what would they say?\" English canonical, replies follow the user's language.",
-    "version": "2.2.0"
+    "version": "2.3.0"
   },
   "plugins": [
     {
       "name": "best-minds",
       "source": "./",
       "description": "Simulator-mindset methodology skill: don't ask 'what do you think,' ask 'which group of people would best explore this, and what would they say?' Based on Karpathy's 2025 simulator view; includes anti-sycophancy guardrails, quote verification, blind-spot scan, and a two-stage sub-agent round-table flow. Replies follow the user's language.",
-      "version": "2.2.0",
+      "version": "2.3.0",
       "author": {
         "name": "yelban"
       },
